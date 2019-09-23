@@ -1,0 +1,505 @@
+/* You can add global styles to this file, and also import other style files */
+*{
+    padding: 0px;
+    margin: 0px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-sizing: border-box;
+    
+}
+hr{
+    border: 1px solid rgb(83, 101, 192);
+}
+.ratewrap{
+    max-height: 400px;
+    width: 100%;
+    overflow: auto;
+    outline-color: darkslategrey;
+    outline-style: solid;
+    outline-width: 1px;
+    box-shadow: inset 0 20px 20px -7px rgba(0, 0, 0, 0.678);
+}
+input[type=submit] {
+    font-weight: bold;
+    background-color: turquoise;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px 2px black;
+    padding: 2px;
+    border: none;
+    margin: 3px;
+  }
+  #publish{
+      width: 100%;
+      display: block;
+  }
+  button{
+    font-weight: bold;
+    background-color: turquoise;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px 2px black;
+    padding: 2px;
+    border: none;
+    margin: 3px;
+  }
+.sepline{
+    background-color: darkslategrey;
+}
+
+.rate{
+    max-width: 300px;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+.commentbox{
+    width: 100%;
+    height: 75px;
+}
+
+.auto{
+    margin: 0 auto;
+}
+
+/* content box types */
+
+body{
+    background-color: rgb(204, 204, 204);
+    color: darkslategrey;
+}
+.container{
+    width: 100%;
+    display: block;
+    background-color: white;
+    color: darkslategrey;
+}
+
+.userbox{
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    width: 150px;
+    height: 150px;
+}
+
+.header{
+    background-color: rgb(71, 71, 71);
+    color: white;
+    /* padding: 10px; */
+    display: block;
+    width: 100%;
+    text-align: center;
+    height: 50px;
+    min-width: 401px;
+    border-bottom-color: white;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-top-color: white;
+    border-top-style: 1px;
+    border-top-color: white;
+
+}
+
+.logo{
+    position: absolute;
+    left: 10px;
+    top: 5px;
+}
+.stick200{
+    min-width: 150px;
+}
+.topbar{
+    height: 10px;
+    width: 100%;
+    background-color: white;
+}
+
+.user{
+    position: absolute;
+    right: 75px;
+
+}
+
+.avatar{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    height: 30px;
+    width: 50px;
+    background-color: white;
+    border-radius: 5px;
+    background-size: 50px 30px;
+    background-position: center;
+    background-repeat: no-repeat;
+    text-shadow:
+    -1px -1px 0 #711C91,
+    1px -1px 0 #711C91,
+    -1px 1px 0 #711C91,
+    1px 1px 0 #711C91;
+}
+.avatarbig{
+    height: 90px;
+    width: 150px;
+    background-color: white;
+    border-radius: 5px;
+    background-size: 150px 90px;
+    background-position: center;
+    background-repeat: no-repeat;
+    text-shadow:
+    -1px -1px 0 #711C91,
+    1px -1px 0 #711C91,
+    -1px 1px 0 #711C91,
+    1px 1px 0 #711C91;
+    text-align: center;
+    color: white;
+    font-size: 20px;
+    -webkit-box-shadow: 0 12px 6px -3px rgba(0, 0, 0, 0.623);
+       -moz-box-shadow: 0 12px 6px -3px rgba(0, 0, 0, 0.623);
+       box-shadow: 0 12px 6px -3px rgba(0, 0, 0, 0.623);
+}
+
+.main{
+    padding: 20px;
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: darkslategrey;
+    background-color: white;
+    position: absolute;
+    top: 50px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    /* overflow-y: scroll;
+    overflow-x: auto; */
+    box-shadow: inset 0 20px 20px -7px rgba(0, 0, 0, 0.678);
+    /* -moz-box-shadow:    inset 0 0 10px #000000;
+    -webkit-box-shadow: inset 0 0 10px #000000;
+    box-shadow:  inset 0 0 10px #000000; */
+}
+.errors{
+    font-weight: bold;
+    color: red;
+}
+.cake{
+    max-height: 200px;
+    max-width: 200px;
+    object-fit: contain;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 30px;
+}
+.margin10{
+    margin: 10px;
+}
+.bigimage{
+    max-height: 500px;
+    max-width: 500px;
+    object-fit: contain;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 60px;
+}
+.holder{
+    min-height: 250px;
+}
+.cakecontainer{
+    width: 200px;
+    height: 250px;
+}
+
+.bodyblock{
+    display: block;
+    width: 100%;
+}
+
+.main_draw{
+    display: block;
+    width: 1450px;
+    text-align: center;
+    color: grey;
+    margin: 0px auto;
+}
+
+.info{
+    display: inline-block;
+    background: lightskyblue;
+    border-radius: 20px;
+    box-shadow: 5px 5px grey;
+    padding: 20px;
+    vertical-align: top;
+    margin: 20px auto;
+    color: white;
+}
+
+.wrapper{
+    text-align: center;
+    margin: 0px auto;
+}
+
+.wrapper_left{
+    text-align: left;
+    width: 100%;
+    display: block;
+}
+.displaycase{
+    height: 184px;
+    direction: rtl;
+    overflow:auto;
+    outline-color: rgb(102, 116, 189);
+    outline-width: 1px;
+    outline-style: solid;
+    -webkit-box-shadow: 0 12px 6px -3px rgba(0, 0, 0, 0.623);
+       -moz-box-shadow: 0 12px 6px -3px rgba(0, 0, 0, 0.623);
+       box-shadow: 0 12px 6px -3px rgba(0, 0, 0, 0.623);
+}
+.bold{
+    font-weight: 900;
+}
+.imageboxwrap{
+    width: 210px;
+    height: 175px;
+    text-align: center;
+    vertical-align: top;
+    display: inline-block;
+    color:darkslategrey;
+    font-weight: bolder;
+    background-color: rgb(64, 75, 131);
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.imagebox{
+    width: 220px;
+    height: 275px;
+    background-color: lightskyblue;
+    background-size: 200px 120px;
+    background-repeat: no-repeat;
+    margin: 0px auto;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 3%;
+    margin-right: 3%;
+    margin-top: 10px;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 12px 6px -3px rgba(0, 0, 0, 0.623);
+       -moz-box-shadow: 0 12px 6px -3px rgba(0, 0, 0, 0.623);
+       box-shadow: 0 12px 6px -3px rgba(0, 0, 0, 0.623);
+
+
+}
+
+.maincollab{
+    width: 80%;
+    min-width: 300px;
+    height: auto;
+    background-color: white;
+    margin-top: 30px;
+    color: darkslategrey;
+    
+    border-radius: 15px;
+    -webkit-box-shadow: 0 12px 6px -3px rgba(0, 0, 0, 0.623);
+       -moz-box-shadow: 0 12px 6px -3px rgba(0, 0, 0, 0.623);
+       box-shadow: 0 12px 6px -3px rgba(0, 0, 0, 0.623);
+}
+.parentbox{
+    width: 200px;
+    height: 120px;
+    background-color: white;
+
+}
+
+.pushtop{
+    margin-top: 50px;
+}
+
+.indent30{
+    margin-left: 10%;
+}
+/* div and other box widths */
+
+.quarter{
+    width: 24.9%;
+}
+.half{
+    width: 49.6%;
+}
+
+.full{
+    width: 99.2%;
+}
+
+.wide{
+    width: 74.7%;
+}
+
+.auto{
+    margin: 0px auto;
+}
+
+.comment_box{
+    border-radius: 10px;
+    padding: 10px;
+}
+
+/* text orientations */
+
+.left{
+    text-align: left;
+}
+
+.right{
+    text-align: right;
+}
+
+.center{
+    text-align: center;
+}
+
+.inline{
+    display: inline-block;
+}
+
+.top{
+    vertical-align: top;
+}
+
+.bottom{
+    vertical-align: text-bottom;
+}
+
+/* extra styling */
+
+a{
+    color: darkslategray;
+    text-decoration: none;
+    font-weight: 800;
+}
+
+.indent{
+    margin-left: 20px;
+}
+
+.outline{
+    outline-style: solid;
+    outline-color: lightgrey;
+    outline-width: 1px;
+}
+
+/* colors */
+
+.hilight{
+    color: turquoise;
+}
+
+.scroll{
+    overflow-y: scroll;
+}
+
+.children{
+    direction: rtl;
+    min-height: 500px;
+    min-width: 250px;
+    margin: 20px;
+    text-align: center;
+    overflow-y: scroll;
+}
+
+.italic{
+    font-style: italic;
+}
+
+.small{
+    font-size: 10px;
+}
+
+.faded{
+    color: lightgrey;
+}
+
+/* controller for canvas */
+
+
+#controllers {
+    width: 600px;
+    font-size: 0.8em;
+    color: white;
+  }
+  #paint {
+    border: 1px solid #000;
+    background: #fff;
+  }
+  .controller {
+    display: inline-block;
+    background: #EA00D9;
+    color: darkslategrey;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 5px;
+  }
+
+  .color_picker{
+      height: 19px;
+      width: 25px;
+      display: block;
+      margin: 0px;
+      padding: 0px;
+      float: left;
+  }
+
+  .colorbar{
+      width: 200px;
+  }
+
+  #color_listener{
+      margin: 0px auto;
+  }
+
+  .cl_row{
+      display: block;
+  }
+
+#current_color{
+      width: 200px;
+      height: 50px;
+      background-color: black;
+  }
+
+.sidebar{
+    max-width: 200px;
+    
+}
+
+
+
+.headleft{
+    height: 75px;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+    
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: rgb(66, 79, 145); 
+    
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(102, 116, 189); 
+    border-radius: 5px;
+    
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(102, 116, 189); 
+  }
+
+  
