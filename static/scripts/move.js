@@ -78,6 +78,7 @@ function bounce() {
                 user.y += user.speed + 1;
             }
             move(user);
+            socket.emit('useraction', { character: user });
         }
     }
 }

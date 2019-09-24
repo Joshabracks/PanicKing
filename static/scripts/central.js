@@ -62,7 +62,7 @@ function drawCanvas() {
     ctx.fillStyle = 'slategrey';
     ctx.fillRect(10, 10, canvas.width - 20, canvas.height - 20);
     if (user != null) {
-        drawNinja(user);
+        
     } else {
         title();
     }
@@ -90,7 +90,7 @@ setInterval(function () {
         } else {
             bounce(user);
         }
-
+        players[user.id] = user;
         if (moving == true) {
             socket.emit('useraction', { character: user });
         }
@@ -116,11 +116,15 @@ document.addEventListener('DOMContentLoaded', function () {
 socket.on('player accepted', function (data) {
     console.log('User Verified');
     user = data.user;
+    players = data.players;
 })
 
 socket.on('game update', function (data) {
-    players = data.players;
-    console.log('update');
+    for (player in data.players) {
+        if (data.players[player].id != user.id) {
+            players[player] = data.players[player];
+        }
+    }
 });
 
 function isMoving() {

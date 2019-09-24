@@ -24,7 +24,7 @@ io.on('connection', function (socket){
         players[character.id] = character;
         playerCount++;
         console.log('New Player: Verifying'); 
-        socket.emit('player accepted', {user: character});
+        socket.emit('player accepted', {user: character, players: players});
         io.to('main room').emit('game update', {players: players});
     })
 },);
