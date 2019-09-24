@@ -26,8 +26,68 @@ function Container() {
     this.image;
 }
 
-function Hat() {
-    this.type;
-    this.effect;
-    this.image;
+// Strength Hat
+class StrHat {
+    player;
+    img;
+
+    constructor(player) {
+        this.player = player;
+        // make img whatever you want for strHat this.img = ?
+    }
+
+    effect(){
+        this.player.strength += 3;
+    }
+    
 }
+
+// Speed Hat
+class SpdHat {
+    player;
+    img;
+
+    constructor(player) {
+        this.player = player;
+        // this.img = ?
+    }
+
+    effect(){
+        this.player.speed += 3;
+    }
+    
+}
+
+// JugHat
+class JugHat {
+    player;
+    img;
+
+    constructor(player) {
+        this.player = player;
+        // this.img = ?
+    }
+
+    effect(){
+        this.player.health += 20;
+    }
+    
+}
+
+// Crown
+class Crown {
+    player;
+    img;
+
+    constructor(player) {
+        this.player = player;
+        // this.img = ?
+    }
+
+    effect() {
+        this.player.strength += 3;
+        this.player.speed += 3;
+        this.player.health += 20;
+    }
+}
+
