@@ -5,7 +5,7 @@ function move(object) {
         if (object.lookVert > -5) {
             object.lookVert--;
         }
-    } else { 
+    } else {
         if ((object.lookVert < 0) && (object.down == false)) {
             object.lookVert++;
         }
@@ -13,7 +13,7 @@ function move(object) {
     //MOVE DOWN
     if (object.down == true) {
         object.y += object.speed;
-        
+
         if (object.lookVert < 5) {
             object.lookVert++;
         }
@@ -44,6 +44,40 @@ function move(object) {
             object.lookHorz--;
         }
     }
-    
-    drawCanvas();
+
+    if (object.x < 65) {
+        object.x = 65;
+    }
+    if (object.x > 735) {
+        object.x = 735;
+    }
+    if (object.y < 65) {
+        object.y = 65;
+    }
+    if (object.y > 535) {
+        object.y = 535;
+    }
+
+}
+
+
+function bounce() {
+    for (player in players) {
+        if (players[player].id != user.id) {
+            let current = players[player];
+            if (current.x > user.x) {
+                user.x -= user.speed + 1;
+            }
+            if (current.x < user.x) {
+                user.x += user.speed + 1;
+            }
+            if (current.y > user.y) {
+                user.y -= user.speed + 1;
+            }
+            if (current.y < user.y) {
+                user.y += user.speed + 1;
+            }
+            move(user);
+        }
+    }
 }
