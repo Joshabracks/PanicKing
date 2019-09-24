@@ -1,9 +1,10 @@
 let messages = [];
 let rooms = {};
+let incompleteRooms = {};
 let players = {};
 let playerCount = 1;
 let roomCount = 1;
-
+require('./gameObjects');
 module.exports = function (io) {
 io.on('connection', function (socket){
     socket.emit('greeting', {msg: 'PanicKing: Connected.'});
@@ -11,38 +12,51 @@ io.on('connection', function (socket){
         console.log(data.msg);
     });
     socket.on('useraction', function (data){
-        players[data.character.id] = data.character;
-        io.to('main room').emit('game update', {players: players});
+        room[player.room.id].players[data.character.id] = data.character;
+        io.to(player.room.id).emit('game update', {players: room[player.room.id].players});
     });
     socket.on('new player', function(data){
-        // LET ROOM
+        let room;
         socket.join('main room');
         let character = data.character;
         character.id = playerCount;
         if (character.id == 1) {
-            //CREATE ROOM 0:0
+            room = createRoom(0, 0)
             character.isKing = true;
-            //ROOM = 0:0
+        } else {
+            room = addRoom();
         }
-        // ELSE CREATE NEW ROOM
-        // CHARACTER.ROOM = ROOM
-        // ADD CHARACTER TO ROOM.PLAYERS
-        players[character.id] = character;
+        character.room = room;
+        room[players.id] = character;
         playerCount++;
         console.log('New Player: Verifying'); 
-        socket.emit('player accepted', {user: character, players: players});
-        io.to('main room').emit('game update', {players: players});
+        socket.emit('player accepted', {user: character});
+        io.to(room.id).emit('game update', {players: room.players});
     })
 },);
 }
-function createRoom(){
-    randomRoom = rooms[Object.keys(rooms)[Math.floor(Math.random() * Object.keys(rooms).length)]];
+
+function createRoom(xCoord, yCoord){
+    room = new Room(xCoord, yCoord);
+    return room;
 }
 
-function Room(){
-    this.items = randomItem();
-}
-
-function randomItem(){
-
+function addRoom() {
+    const room = incompleteRooms[Object.keys(incompleteRooms)[Math.floor(Math.random() * Object.keys(incompleteRooms).length)]];
+    const direction = room.brokenDoors[Math.floor(math.random() * room.brokenDoors.length)];
+    let temp = [];
+    for (let i = 0; i < room.brokenDoors.length; i++) {
+        if (room.brokenDoors[i] != direction) {
+            temp.push(room.brokenDoors[i])
+        }
+    }
+    if (temp.length > 0) {
+        room.brokenDoors = temp;
+    } else {
+        delete incompleteRooms[room.id];
+    }
+    newRoom = createRoom(room[direction].xCoord, room[direction].yCoord);
+    rooms[newRoom.id] = newRoom;
+    //UPDATE ROOMS
+    return newRoom;
 }
