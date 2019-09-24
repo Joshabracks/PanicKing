@@ -2,7 +2,7 @@ function Room(xCoord, yCoord){
     this.location = {x: xcoord,y: ycoord};
     //CONNECTED ROOMS BY THEIR COORDINATES
     this.north = {
-        id = {x: this.xCoord, y: this.yCoord - 1}
+        id = {x: this.xCoord, y: this.yCoord - 1},
     };
     this.south = {
         id = {x: this.xCoord, y: this.yCoord + 1}
@@ -15,6 +15,7 @@ function Room(xCoord, yCoord){
     };
     //CONTAINERS WITHIN THIS ROOM || RANDOMLY GENERATED
     this.containers = {};
+    this.brokenDoors = ['north', 'south', 'east', 'west'];
 }
 
 function Container() {

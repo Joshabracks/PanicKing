@@ -10,12 +10,16 @@ function User(name, x, y, width, height) {
     this.up = false;
     this.down = false;
     this.speed = 5;
+    this.strength = 5;
+    this.health = 50;
     this.eyes = "black";
     this.color = "#58595B";
     this.bandana = "red";
     this.lookHorz = 0;
     this.lookVert = 0;
     this.isKing = false;
+    this.hat;
+    this.activeRoom;
 }
 
 let select = "body";
