@@ -6,6 +6,7 @@ socket.on('greeting', function (data) { //4
 
 let moving = false;
 let players;
+let room;
 let blocked = false;
 
 let mode = "title";
@@ -75,6 +76,7 @@ setInterval(function () {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = 'slategrey';
         ctx.fillRect(10, 10, canvas.width - 20, canvas.height - 20);
+        drawDoors();
         blocked = false;
         for (thing in players) {
             let current = players[thing];
@@ -85,6 +87,7 @@ setInterval(function () {
                 }
             }
         }
+        
         if (blocked == false) {
             move(user);
         } else {
@@ -95,6 +98,7 @@ setInterval(function () {
             socket.emit('useraction', { character: user });
         }
         isMoving();
+        travelCheck();
     }
 }, 20);
 
@@ -120,11 +124,14 @@ socket.on('player accepted', function (data) {
 })
 
 socket.on('game update', function (data) {
-    for (player in data.players) {
-        if (data.players[player].id != user.id) {
-            players[player] = data.players[player];
-        }
-    }
+    players = data.players;
+    room = data.room;
+
+    // for (player in data.players) {
+    //     if (data.players[player].id != user.id) {
+    //         players[player] = data.players[player];
+    //     }
+    // }
 });
 
 function isMoving() {

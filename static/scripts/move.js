@@ -45,17 +45,17 @@ function move(object) {
         }
     }
 
-    if (object.x < 65) {
-        object.x = 65;
+    if (object.x < 55) {
+        object.x = 55;
     }
-    if (object.x > 735) {
-        object.x = 735;
+    if (object.x > 745) {
+        object.x = 745;
     }
-    if (object.y < 65) {
-        object.y = 65;
+    if (object.y < 55) {
+        object.y = 55;
     }
-    if (object.y > 535) {
-        object.y = 535;
+    if (object.y > 545) {
+        object.y = 545;
     }
 
 }
@@ -79,6 +79,45 @@ function bounce() {
             }
             move(user);
             socket.emit('useraction', { character: user });
+        }
+    }
+}
+
+function travelCheck() {
+    if (room.north.door.exists == true) {
+        if ((user.y < 64) && (user.x > 350 ) && (user.x < 450) && (user.up == true)) {
+            let oldId = room.id;
+            let id = room.north.id.x + ":" + room.north.id.y;
+            user.y = 540;
+            user.room = id;
+            socket.emit('change rooms', {character: user, id: oldId})
+        }
+    }
+    if (room.south.door.exists == true) {
+        if ((user.y > 549) && (user.x > 350 ) && (user.x < 450) && (user.down == true)) {
+            let oldId = room.id;
+            let id = room.south.id.x + ":" + room.south.id.y;
+            user.y = 70;
+            user.room = id;
+            socket.emit('change rooms', {character: user, id: oldId})
+        }
+    }
+    if (room.east.door.exists == true) {
+        if ((user.x > 734) && (user.y > 250 ) && (user.y < 350) && (user.right == true)) {
+            let oldId = room.id;
+            let id = room.east.id.x + ":" + room.east.id.y;
+            user.x = 70;
+            user.room = id;
+            socket.emit('change rooms', {character: user, id: oldId})
+        }
+    }
+    if (room.west.door.exists == true) {
+        if ((user.x < 64) && (user.y > 250 ) && (user.y < 350) && (user.left == true)) {
+            let oldId = room.id;
+            let id = room.west.id.x + ":" + room.west.id.y;
+            user.x = 725;
+            user.room = id;
+            socket.emit('change rooms', {character: user, id: oldId})
         }
     }
 }

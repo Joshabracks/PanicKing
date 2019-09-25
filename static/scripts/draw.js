@@ -76,3 +76,22 @@ function drawSelectScreen(){
     }
     drawNinja(character);
 }
+
+function drawDoors() {
+    if (room.north.door.exists == true) {
+        ctx.fillStyle = 'slategrey';
+        ctx.fillRect(350, 0, 100, 20);
+    }
+    if (room.south.door.exists == true) {
+        ctx.fillStyle = 'slategrey';
+        ctx.fillRect(350, 580, 100, 20);
+    }
+    if (room.east.door.exists == true) {
+        ctx.fillStyle = 'slategrey';
+        ctx.fillRect(780, 250, 20, 100);
+    }
+    if (room.west.door.exists == true) {
+        ctx.fillStyle = 'slategrey';
+        ctx.fillRect(0, 250, 20, 100);
+    }
+}
