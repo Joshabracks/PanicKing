@@ -17,9 +17,11 @@ function User(name, x, y, width, height) {
     this.bandana = "red";
     this.lookHorz = 0;
     this.lookVert = 0;
-    this.isKing = false;
-    this.hat;
-    this.activeRoom;
+    this.hat = false;
+    this.room;
+    this.health = 50;
+    this.keys = {};
+    this.inventory = {};
 }
 
 let select = "body";
@@ -27,6 +29,7 @@ let select = "body";
 let character = null;
 function createCharacter() {
     character = new User("", 200, 120, 75, 75);
+    character.id = id;
     ctx.fillStyle = 'darkslategrey';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = 'slategrey';
@@ -39,6 +42,8 @@ function createCharacter() {
     ctx.fillText("Eyes", 300, 200);
     ctx.fillText("Bandana", 300, 300);
     ctx.fillText("Join the Panic!!!", 300, 400);
+    ctx.font = "15px Arial"
+    ctx.fillText("MOVE: WASD | SELECT : SPACEBAR", 15, 585);
 }
 
 function joinGame() {

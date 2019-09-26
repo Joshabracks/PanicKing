@@ -46,8 +46,10 @@ function drawNinja(ninja) {
     ctx.beginPath();
     ctx.strokeRect(ninja.x-35, ninja.y - 25, 20, 20);
     ctx.closePath();
-    if (ninja.isKing == true) {
-        ctx.drawImage(crown, ninja.x-70, ninja.y-70);
+    if (ninja.hat) {
+        let img = new Image(ninja.hat.width, ninja.hat.height);
+        img.src = ninja.hat.image;
+        ctx.drawImage(img, ninja.x-ninja.hat.drawLoc.x, ninja.y-ninja.hat.drawLoc.y);
     }
 }
 
@@ -64,6 +66,9 @@ function drawSelectScreen(){
     ctx.fillText("Eyes", 300, 200);
     ctx.fillText("Bandana", 300, 300);
     ctx.fillText("Join the Panic!!!", 300, 400);
+    ctx.font = "15px Arial"
+    ctx.fillText("MOVE: WASD | SELECT : SPACEBAR", 15, 585);
+    ctx.font = "30px Arial";
     ctx.fillStyle = "white";
     if (select == 'body') {
         ctx.fillText("Body", 300, 100);
@@ -75,4 +80,23 @@ function drawSelectScreen(){
         ctx.fillText("Join the Panic!!!", 300, 400);
     }
     drawNinja(character);
+}
+
+function drawDoors() {
+    if (room.north.door.exists == true) {
+        ctx.fillStyle = 'slategrey';
+        ctx.fillRect(350, 0, 100, 20);
+    }
+    if (room.south.door.exists == true) {
+        ctx.fillStyle = 'slategrey';
+        ctx.fillRect(350, 580, 100, 20);
+    }
+    if (room.east.door.exists == true) {
+        ctx.fillStyle = 'slategrey';
+        ctx.fillRect(780, 250, 20, 100);
+    }
+    if (room.west.door.exists == true) {
+        ctx.fillStyle = 'slategrey';
+        ctx.fillRect(0, 250, 20, 100);
+    }
 }

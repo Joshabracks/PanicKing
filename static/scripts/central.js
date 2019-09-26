@@ -1,12 +1,21 @@
 const socket = io();
 socket.on('greeting', function (data) { //4
     console.log(data.msg); //5
-    socket.emit('thankyou', { msg: 'Thank you for connecting me! -Client' }); //6
+    id = data.id;
+    socket.emit('thankyou', { msg: 'Thank you for connecting me! -Client', id: id }); //6
 });
-
+let id;
 let moving = false;
 let players;
+let room;
 let blocked = false;
+let equip = false;
+let updatePackage = {
+    sent: true,
+    character: {data: null, sent: true},
+    room: {data: null, sent: true},
+}
+let updatePending = false;
 
 let mode = "title";
 
@@ -35,6 +44,15 @@ function title() {
                 delta += .01
             }
             else {
+                ctx.globalAlpha = 1;
+                ctx.fillStyle = 'darkslategrey';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'slategrey';
+                ctx.fillRect(10, 10, canvas.width - 20, canvas.height - 20);
+                ctx.drawImage(titleCard, 100, 150);
+                ctx.font = "15px Arial";
+                ctx.fillStyle = "white";
+                ctx.fillText("Press Any Key", 600, 400);
                 clearInterval(titleFade);
             }
         }, 40);
@@ -62,8 +80,9 @@ function drawCanvas() {
     ctx.fillStyle = 'slategrey';
     ctx.fillRect(10, 10, canvas.width - 20, canvas.height - 20);
     if (user != null) {
-        
+        console.log('user');
     } else {
+        console.log('title');
         title();
     }
 }
@@ -75,6 +94,7 @@ setInterval(function () {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = 'slategrey';
         ctx.fillRect(10, 10, canvas.width - 20, canvas.height - 20);
+        drawDoors();
         blocked = false;
         for (thing in players) {
             let current = players[thing];
@@ -85,16 +105,25 @@ setInterval(function () {
                 }
             }
         }
+        
         if (blocked == false) {
             move(user);
         } else {
             bounce(user);
         }
         players[user.id] = user;
-        if (moving == true) {
-            socket.emit('useraction', { character: user });
+        if ((moving == true) && (updatePending == false)) {
+            updatePackage.character = user;
+            updatePackage.sent = false;
         }
         isMoving();
+        travelCheck();
+        itemCheck();
+        if ((updatePackage.sent == false) && (updatePending == false)) {
+            socket.emit('useraction', updatePackage);
+            updatePending = true;
+            updatePackage.sent = true;
+        }
     }
 }, 20);
 
@@ -116,15 +145,30 @@ document.addEventListener('DOMContentLoaded', function () {
 socket.on('player accepted', function (data) {
     console.log('User Verified');
     user = data.user;
+    updatePackage.character = user;
     players = data.players;
-})
+});
 
 socket.on('game update', function (data) {
-    for (player in data.players) {
-        if (data.players[player].id != user.id) {
-            players[player] = data.players[player];
-        }
-    }
+    delete room;
+    delete players;
+    players = data.room.players;
+    let userUpdate = data.room.players[user.id];
+    user.hat = userUpdate.hat;
+    user.inventory = userUpdate.inventory;
+    user.keys = userUpdate.keys;
+    user.speed = userUpdate.speed;
+    user.health = userUpdate.health;
+    user.strength = userUpdate.strength;
+    room = data.room;
+    user.room = data.room.id;
+    updatePending = false;
+
+    // for (player in data.players) {
+    //     if (data.players[player].id != user.id) {
+    //         players[player] = data.players[player];
+    //     }
+    // }
 });
 
 function isMoving() {
