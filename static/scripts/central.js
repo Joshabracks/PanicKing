@@ -1,13 +1,15 @@
 const socket = io();
 socket.on('greeting', function (data) { //4
     console.log(data.msg); //5
-    socket.emit('thankyou', { msg: 'Thank you for connecting me! -Client' }); //6
+    id = data.id;
+    socket.emit('thankyou', { msg: 'Thank you for connecting me! -Client', id: id }); //6
 });
-
+let id;
 let moving = false;
 let players;
 let room;
 let blocked = false;
+let equip = false;
 
 let mode = "title";
 
@@ -36,6 +38,15 @@ function title() {
                 delta += .01
             }
             else {
+                ctx.globalAlpha = 1;
+                ctx.fillStyle = 'darkslategrey';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'slategrey';
+                ctx.fillRect(10, 10, canvas.width - 20, canvas.height - 20);
+                ctx.drawImage(titleCard, 100, 150);
+                ctx.font = "15px Arial";
+                ctx.fillStyle = "white";
+                ctx.fillText("Press Any Key", 600, 400);
                 clearInterval(titleFade);
             }
         }, 40);
@@ -99,6 +110,7 @@ setInterval(function () {
         }
         isMoving();
         travelCheck();
+        itemCheck();
     }
 }, 20);
 
@@ -121,11 +133,14 @@ socket.on('player accepted', function (data) {
     console.log('User Verified');
     user = data.user;
     players = data.players;
-})
+});
 
 socket.on('game update', function (data) {
-    players = data.players;
+    delete room;
+    delete players;
+    players = data.room.players;
     room = data.room;
+    user.room = data.room.id;
 
     // for (player in data.players) {
     //     if (data.players[player].id != user.id) {

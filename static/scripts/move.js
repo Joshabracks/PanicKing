@@ -86,6 +86,8 @@ function bounce() {
 function travelCheck() {
     if (room.north.door.exists == true) {
         if ((user.y < 64) && (user.x > 350 ) && (user.x < 450) && (user.up == true)) {
+            // user.up = false;
+            moving = false;
             let oldId = room.id;
             let id = room.north.id.x + ":" + room.north.id.y;
             user.y = 540;
@@ -94,7 +96,9 @@ function travelCheck() {
         }
     }
     if (room.south.door.exists == true) {
-        if ((user.y > 549) && (user.x > 350 ) && (user.x < 450) && (user.down == true)) {
+        if ((user.y > 540) && (user.x > 350 ) && (user.x < 450) && (user.down == true)) {
+            // user.down = false;
+            moving = false;
             let oldId = room.id;
             let id = room.south.id.x + ":" + room.south.id.y;
             user.y = 70;
@@ -104,6 +108,8 @@ function travelCheck() {
     }
     if (room.east.door.exists == true) {
         if ((user.x > 734) && (user.y > 250 ) && (user.y < 350) && (user.right == true)) {
+            // user.right = false;
+            moving = false;
             let oldId = room.id;
             let id = room.east.id.x + ":" + room.east.id.y;
             user.x = 70;
@@ -113,6 +119,8 @@ function travelCheck() {
     }
     if (room.west.door.exists == true) {
         if ((user.x < 64) && (user.y > 250 ) && (user.y < 350) && (user.left == true)) {
+            // user.left = false;
+            moving = false;
             let oldId = room.id;
             let id = room.west.id.x + ":" + room.west.id.y;
             user.x = 725;
