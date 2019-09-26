@@ -10,6 +10,12 @@ let players;
 let room;
 let blocked = false;
 let equip = false;
+let updatePackage = {
+    sent: true,
+    character: {data: null, sent: true},
+    room: {data: null, sent: true},
+}
+let updatePending = false;
 
 let mode = "title";
 
@@ -74,8 +80,9 @@ function drawCanvas() {
     ctx.fillStyle = 'slategrey';
     ctx.fillRect(10, 10, canvas.width - 20, canvas.height - 20);
     if (user != null) {
-        
+        console.log('user');
     } else {
+        console.log('title');
         title();
     }
 }
@@ -105,12 +112,18 @@ setInterval(function () {
             bounce(user);
         }
         players[user.id] = user;
-        if (moving == true) {
-            socket.emit('useraction', { character: user });
+        if ((moving == true) && (updatePending == false)) {
+            updatePackage.character = user;
+            updatePackage.sent = false;
         }
         isMoving();
         travelCheck();
         itemCheck();
+        if ((updatePackage.sent == false) && (updatePending == false)) {
+            socket.emit('useraction', updatePackage);
+            updatePending = true;
+            updatePackage.sent = true;
+        }
     }
 }, 20);
 
@@ -132,6 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
 socket.on('player accepted', function (data) {
     console.log('User Verified');
     user = data.user;
+    updatePackage.character = user;
     players = data.players;
 });
 
@@ -139,8 +153,16 @@ socket.on('game update', function (data) {
     delete room;
     delete players;
     players = data.room.players;
+    let userUpdate = data.room.players[user.id];
+    user.hat = userUpdate.hat;
+    user.inventory = userUpdate.inventory;
+    user.keys = userUpdate.keys;
+    user.speed = userUpdate.speed;
+    user.health = userUpdate.health;
+    user.strength = userUpdate.strength;
     room = data.room;
     user.room = data.room.id;
+    updatePending = false;
 
     // for (player in data.players) {
     //     if (data.players[player].id != user.id) {

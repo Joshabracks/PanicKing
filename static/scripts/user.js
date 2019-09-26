@@ -17,12 +17,11 @@ function User(name, x, y, width, height) {
     this.bandana = "red";
     this.lookHorz = 0;
     this.lookVert = 0;
-    this.isKing = false;
-    this.hat;
+    this.hat = false;
     this.room;
     this.health = 50;
-    this.keys = [];
-    this.inventory = [];
+    this.keys = {};
+    this.inventory = {};
 }
 
 let select = "body";
