@@ -14,16 +14,17 @@ module.exports = function (io) {
             console.log(data.msg);
         });
         socket.on('useraction', function (data) {
-            try{
-            let character = rooms[data.character.room].players[data.character.id];
-            character.x = data.character.x;
-            character.y = data.character.y;
-            character.health = data.character.health;
-            character.lookVert = data.character.lookVert;
-            character.lookHorz = data.character.lookHorz;
-            itemCollision(rooms[data.character.room]);
-            io.to(data.character.room).emit('game update', { room: rooms[data.character.room] });}
-            catch(error) {console.log(error)};
+            try {
+                let character = rooms[data.character.room].players[data.character.id];
+                character.x = data.character.x;
+                character.y = data.character.y;
+                character.health = data.character.health;
+                character.lookVert = data.character.lookVert;
+                character.lookHorz = data.character.lookHorz;
+                itemCollision(rooms[data.character.room]);
+                io.to(data.character.room).emit('game update', { room: rooms[data.character.room] });
+            }
+            catch (error) { console.log(error) };
         });
         // socket.on('itemaction', function (data) {
         //     rooms[data.room.id].contents = data.room.contents;
@@ -153,7 +154,10 @@ module.exports = function (io) {
                         } else if (item.type == 'key') {
                             console.log('Key Pickup: ', item);
                             current.keys[item.id] = item;
-                        } else {
+                        } else if (item.type == 'health') {
+                            current.health += item.health;
+                        }
+                        else {
                             current.inventory[item.id] = item;
                         }
                         delete room.contents[item.id];
@@ -171,7 +175,7 @@ module.exports = function (io) {
     }
 
     function randomItem() {
-        let randInt = Math.floor(Math.random() * 3);
+        let randInt = Math.floor(Math.random() * 4);
         let newItem;
         if (randInt == 0) {
             newItem = new Helmet();
@@ -182,8 +186,11 @@ module.exports = function (io) {
         if (randInt == 2) {
             newItem = new SpeedHat();
         }
-        newItem.x = Math.floor((Math.random() * 750) + 25);
-        newItem.y = Math.floor((Math.random() * 550) + 25);
+        if (randInt == 3) {
+            newItem = new HealthPack();
+        }
+        newItem.x = Math.floor((Math.random() * 600) + 25);
+        newItem.y = Math.floor((Math.random() * 400) + 25);
         return newItem;
     }
 
@@ -330,6 +337,17 @@ function Crown() {
     this.health = 20;
     this.strength = 3;
     this.speed = 2;
+}
+
+function HealthPack() {
+    this.type = 'health';
+    this.id = itemCount;
+    itemCount++;
+    this.width = 41.364;
+    this.height = 41.364;
+    this.drawLoc = { x: 70, y: 70 };
+    this.image = "images/healthPack.svg";
+    this.health = Math.floor((Math.random() * 20) + 5);
 }
 function dawnHat(character, hat) {
     character.strength += hat.strength;

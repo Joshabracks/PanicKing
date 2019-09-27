@@ -1,14 +1,9 @@
-const winHeight = window.innerHeight/600;
-const winWidth = window.innerWidth /800;
+
 const canvas = document.getElementById("canvas");
 
-let scaler = winWidth;
-if (winHeight < winWidth) {
-    scaler = winHeight;
-}
 
-canvas.height = 600*scaler;
-canvas.width = 800*scaler;
+canvas.height = 600;
+canvas.width = 800;
 
 
 const ctx = canvas.getContext("2d");
@@ -114,6 +109,7 @@ setInterval(function () {
             drawNinja(current);
             if (current.id != user.id) {
                 if ((Math.abs(user.x - current.x) < 90) && (Math.abs(user.y - current.y) < 90)) {
+                    damage(current.strength);
                     blocked = true;
                 }
             }

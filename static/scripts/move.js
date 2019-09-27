@@ -77,12 +77,15 @@ function bounce() {
             if (current.y < user.y) {
                 user.y += user.speed + 1;
             }
-            user.health -= current.strength/10;
             move(user);
             updatePackage.character = user;
             updatePackage.sent = false;
         }
     }
+}
+
+function damage(strength){
+    user.health -= strength/10;
 }
 
 function travelCheck() {
