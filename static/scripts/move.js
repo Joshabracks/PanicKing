@@ -84,6 +84,10 @@ function bounce() {
     }
 }
 
+function damage(strength){
+    user.health -= strength/10;
+}
+
 function travelCheck() {
     if (room.north.door.exists == true) {
         if ((user.y < 64) && (user.x > 350 ) && (user.x < 450) && (user.up == true)) {

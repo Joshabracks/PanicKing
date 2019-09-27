@@ -4,7 +4,12 @@
     margin: 0px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     box-sizing: border-box;
+    overflow: hidden;
+    background-color: darkslategray;
     
+}
+.hidden{
+    display: none;
 }
 hr{
     border: 1px solid rgb(83, 101, 192);

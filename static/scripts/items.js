@@ -62,3 +62,15 @@ function itemCheck() {
     // updatePackage.room.sent = false;
     // updatePackage.sent = false;
 }
+
+function changeEquip(val) {
+    equip += val;
+    if (equip == -1) {
+        equip = user.bagTotal;
+    }
+    if (equip > user.bagTotal) {
+        equip = 0;
+    }
+    equippedItem = user.inventory[user.bag[equip]];
+    console.log(equippedItem);
+}

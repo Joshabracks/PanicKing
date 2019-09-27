@@ -1,3 +1,14 @@
+
+const canvas = document.getElementById("canvas");
+
+
+canvas.height = 600;
+canvas.width = 800;
+
+
+const ctx = canvas.getContext("2d");
+let user = null;
+
 const socket = io();
 socket.on('greeting', function (data) { //4
     console.log(data.msg); //5
@@ -9,7 +20,8 @@ let moving = false;
 let players;
 let room;
 let blocked = false;
-let equip = false;
+let equip = 0;
+let equippedItem = 0;
 let updatePackage = {
     sent: true,
     character: {data: null, sent: true},
@@ -61,11 +73,7 @@ function title() {
 
 
 
-const canvas = document.getElementById("canvas");
-canvas.height = 600;
-canvas.width = 800;
-const ctx = canvas.getContext("2d");
-let user = null;
+
 
 
 // let user = new User("Smiley", 10, 10, 100, 100);
@@ -92,7 +100,7 @@ setInterval(function () {
     if (user != null) {
         ctx.fillStyle = 'darkslategrey';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = 'slategrey';
+        ctx.fillStyle = room.color;
         ctx.fillRect(10, 10, canvas.width - 20, canvas.height - 20);
         drawDoors();
         blocked = false;
@@ -101,6 +109,7 @@ setInterval(function () {
             drawNinja(current);
             if (current.id != user.id) {
                 if ((Math.abs(user.x - current.x) < 90) && (Math.abs(user.y - current.y) < 90)) {
+                    damage(current.strength);
                     blocked = true;
                 }
             }
@@ -160,9 +169,16 @@ socket.on('game update', function (data) {
     user.speed = userUpdate.speed;
     user.health = userUpdate.health;
     user.strength = userUpdate.strength;
+    user.bag = userUpdate.bag;
+    user.bagTotal = userUpdate.bagTotal;
+    user.keyRing = userUpdate.keyRing;
+    user.keyTotal = userUpdate.keyTotal;
     room = data.room;
     user.room = data.room.id;
     updatePending = false;
+    if (user.health < 0) {
+        location.reload();
+    }
 
     // for (player in data.players) {
     //     if (data.players[player].id != user.id) {

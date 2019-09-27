@@ -22,6 +22,10 @@ function User(name, x, y, width, height) {
     this.health = 50;
     this.keys = {};
     this.inventory = {};
+    this.bag = [];
+    this.keyRing = [];
+    this.bagTotal = [];
+    this.keyTotal = [];
 }
 
 let select = "body";

@@ -1,4 +1,3 @@
-
 let messages = [];
 let rooms = {};
 let incompleteRooms = {};
@@ -15,13 +14,17 @@ module.exports = function (io) {
             console.log(data.msg);
         });
         socket.on('useraction', function (data) {
-            let character = rooms[data.character.room].players[data.character.id];
-            character.x = data.character.x;
-            character.y = data.character.y;
-            character.lookVert = data.character.lookVert;
-            character.lookHorz = data.character.lookHorz;
-            itemCollision(rooms[data.character.room]);
-            io.to(data.character.room).emit('game update', { room: rooms[data.character.room] });
+            try {
+                let character = rooms[data.character.room].players[data.character.id];
+                character.x = data.character.x;
+                character.y = data.character.y;
+                character.health = data.character.health;
+                character.lookVert = data.character.lookVert;
+                character.lookHorz = data.character.lookHorz;
+                itemCollision(rooms[data.character.room]);
+                io.to(data.character.room).emit('game update', { room: rooms[data.character.room] });
+            }
+            catch (error) { console.log(error) };
         });
         // socket.on('itemaction', function (data) {
         //     rooms[data.room.id].contents = data.room.contents;
@@ -55,6 +58,8 @@ module.exports = function (io) {
                 dawnHat(character, crown);
             } else {
                 room = addRoom();
+                const rando = randomItem();
+                room.contents[rando.id] = rando;
             }
             //generate key
             key = new Key(character, room);
@@ -72,6 +77,7 @@ module.exports = function (io) {
             io.to(room.id).emit('game update', { room: rooms[room.id] });
         })
         socket.on('disconnect', function (data) {
+            let hp = new HealthPack();
             for (place in rooms) {
                 let room = rooms[place];
                 for (player in room.players) {
@@ -93,6 +99,9 @@ module.exports = function (io) {
                             hat.y = current.y;
                             room.contents[current.hat.id] = current.hat;
                         }
+                        hp.x = current.x;
+                        hp.y = current.y;
+                        room.contents[hp.id] = hp;
                         delete rooms[place].players[player];
                         io.to(room.id).emit('game update', { room: room });
                     }
@@ -100,33 +109,33 @@ module.exports = function (io) {
             }
         });
     });
-
     function itemCollision(room) {
         for (object in room.contents) {
             let item = room.contents[object];
             for (key in room.contents) {
                 if (room.contents[key] != item) {
                     let current = room.contents[key];
-                    if ((Math.abs(item.x - current.x) < 90) && (Math.abs(item.y - current.y) < 90)) {
-                        if (current.x == item.x) {
-                            item.x = item.x + ((Math.random() * 2) - 1);
-                        }
-                        if (current.y == item.y) {
-                            item.y = item.y + ((Math.random() * 2) - 1);
-                        }
-                        if (current.x > item.x) {
-                            item.x -= 5;
-                        }
-                        if (current.x < item.x) {
-                            item.x += 5;
-                        }
-                        if (current.y > item.y) {
-                            item.y -= 5;
-                        }
-                        if (current.y < item.y) {
-                            item.y += 5;
-                        }
-                    }
+                    // if ((Math.abs(item.x - current.x) < 50) && (Math.abs(item.y - current.y) < 50)) {
+                    //     let dist = 50 - ((Math.abs(item.x - current.x) + Math.abs(item.y - current.y))/2);
+                    //     if (current.x == item.x) {
+                    //         item.x = item.x + ((Math.random() * 2) - 1);
+                    //     }
+                    //     if (current.y == item.y) {
+                    //         item.y = item.y + ((Math.random() * 2) - 1);
+                    //     }
+                    //     if (current.x > item.x) {
+                    //         item.x -= dist/10;
+                    //     }
+                    //     if (current.x < item.x) {d
+                    //         item.x += dist/10;
+                    //     }
+                    //     if (current.y > item.y) {
+                    //         item.y -= dist/10;
+                    //     }
+                    //     if (current.y < item.y) {
+                    //         item.y += dist/10;
+                    //     }
+                    // }
                 }
                 for (player in room.players) {
                     let current = room.players[player];
@@ -148,15 +157,44 @@ module.exports = function (io) {
                         } else if (item.type == 'key') {
                             console.log('Key Pickup: ', item);
                             current.keys[item.id] = item;
-                        } else {
+                        } else if (item.type == 'health') {
+                            current.health += item.health;
+                        }
+                        else {
                             current.inventory[item.id] = item;
                         }
                         delete room.contents[item.id];
+                        let keyRing = Object.keys(current.keys);
+                        let bag = Object.keys(current.inventory);
+                        current.keyRing = keyRing;
+                        current.bag = bag;
+                        current.keyTotal = keyRing.length;
+                        current.bagTotal = bag.length;
                         rooms[current.room].players[current.id] = current;
                     }
                 }
             }
         }
+    }
+
+    function randomItem() {
+        let randInt = Math.floor(Math.random() * 4);
+        let newItem;
+        if (randInt == 0) {
+            newItem = new Helmet();
+        }
+        if (randInt == 1) {
+            newItem = new SpikedHelmet();
+        }
+        if (randInt == 2) {
+            newItem = new SpeedHat();
+        }
+        if (randInt == 3) {
+            newItem = new HealthPack();
+        }
+        newItem.x = Math.floor((Math.random() * 600) + 25);
+        newItem.y = Math.floor((Math.random() * 400) + 25);
+        return newItem;
     }
 
     function runDoorCheck() {
@@ -169,21 +207,25 @@ module.exports = function (io) {
         if (rooms[room.north.id.x + ":" + room.north.id.y]) {
             // let current = rooms[room.north.id.x + ":" + room.north.id.y];
             room.north.door.exists = true;
+            rooms[room.id].north.door.color = rooms[room.north.id.x + ":" + room.north.id.y].color;
             io.to(room.id).emit('game update', { room: room });
         }
         if (rooms[room.south.id.x + ":" + room.south.id.y]) {
             // let current = rooms[room.south.id.x + ":" + room.south.id.y];
             room.south.door.exists = true;
+            rooms[room.id].south.door.color = rooms[room.south.id.x + ":" + room.south.id.y].color;
             io.to(room.id).emit('game update', { room: room });
         }
         if (rooms[room.east.id.x + ":" + room.east.id.y]) {
             // let current = rooms[room.east.id.x + ":" + room.east.id.y];
             room.east.door.exists = true;
+            rooms[room.id].east.door.color = rooms[room.east.id.x + ":" + room.east.id.y].color;
             io.to(room.id).emit('game update', { room: room });
         }
         if (rooms[room.west.id.x + ":" + room.west.id.y]) {
             // let current = rooms[room.west.id.x + ":" + room.west.id.y];
             room.west.door.exists = true;
+            rooms[room.id].west.door.color = rooms[room.west.id.x + ":" + room.west.id.y].color;
             io.to(room.id).emit('game update', { room: room });
         }
     }
@@ -238,6 +280,7 @@ function Room(xCoord, yCoord) {
     this.players = {};
     this.brokenDoors = ['north', 'south', 'east', 'west'];
     this.contents = {};
+    this.color = randomMutedColor();
 }
 
 function Container() {
@@ -249,40 +292,49 @@ function Container() {
 }
 
 // Strength Hat
-function SpikedHelmet(character) {
+function SpikedHelmet() {
+    this.type = 'hat';
     this.id = itemCount;
     itemCount++;
-    this.character = character;
-    this.image = "spikedHelmet.svg";
-    this.effect = () => {
-        this.character.strength += 3;
-    }
+    this.image = "images/spikedHelmet.svg";
+    this.width = 200;
+    this.height = 200;
+    this.drawLoc = { x: 78, y: 135 };
+    this.health = 0;
+    this.strength = 4;
+    this.speed = 0;
 }
 
 // Speed Hat
-function SpeedHat(character) {
+function SpeedHat() {
+    this.type = 'hat';
     this.id = itemCount;
     itemCount++;
-    this.character = character;
-    this.image = "speedHat.svg";
-    this.effect = () => {
-        this.character.speed += 3;
-    }
+    this.image = "images/speedCap.svg";
+    this.width = 41.364;
+    this.height = 41.364;
+    this.drawLoc = { x: 75, y: 110 };
+    this.health = 0;
+    this.strength = 0;
+    this.speed = 3;
 }
 
 // JugHat
-function helmet(character) {
+function Helmet() {
+    this.type = 'hat';
     this.id = itemCount;
     itemCount++;
-    this.character = character;
-    this.image = "helmet.svg";
-    this.effect = () => {
-        this.character.health += 20;
-    }
+    this.image = "images/helmet.svg";
+    this.width = 41.364;
+    this.height = 41.364;
+    this.drawLoc = { x: 75, y: 100 };
+    this.health = 30;
+    this.strength = 0;
+    this.speed = 0;
 }
 
 // Crown
-function Crown(character) {
+function Crown() {
     this.type = 'crown';
     this.id = itemCount;
     itemCount++;
@@ -292,7 +344,18 @@ function Crown(character) {
     this.drawLoc = { x: 70, y: 70 };
     this.health = 20;
     this.strength = 3;
-    this.speed = 3;
+    this.speed = 2;
+}
+
+function HealthPack() {
+    this.type = 'health';
+    this.id = itemCount;
+    itemCount++;
+    this.width = 41.364;
+    this.height = 41.364;
+    this.drawLoc = { x: 70, y: 70 };
+    this.image = "images/healthPack.svg";
+    this.health = Math.floor((Math.random() * 20) + 5);
 }
 function dawnHat(character, hat) {
     character.strength += hat.strength;
@@ -322,4 +385,30 @@ function Key(character, room) {
     this.rooms[room.east.id.x + ":" + room.east.id.y] = true;
     this.rooms[room.west.id.x + ":" + room.north.id.y] = true;
     this.rooms[room.id] = true;
+}
+
+function randomMutedColor(){
+    let r = Math.floor(Math.random() * 255);
+    let g = r;
+    g += Math.floor(Math.random() * 100) -50;
+    if (g < 0) {
+        g = 0;
+        g += Math.floor(Math.random() * 50);
+    }
+    if (g > 255) {
+        g = 255;
+        g -= Math.floor(Math.random() * 50)
+    } 
+    let b = r;
+    b += Math.floor(Math.random() * 100) -50;
+    if (b < 0) {
+        b = 0;
+        b += Math.floor(Math.random() * 50);
+    }
+    if (b > 255) {
+        b = 255;
+        b -= Math.floor(Math.random() * 50)
+    } 
+    let color = "rgb(" + r + ", " + g + ", " + b + ")";
+    return color;
 }

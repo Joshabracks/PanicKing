@@ -3,6 +3,7 @@ crown.src = "images/crown.svg";
 
 function drawNinja(ninja) {
     ctx.fillStyle = ninja.color;
+    ctx.strokeStyle = 'black';
     ctx.beginPath();
     ctx.arc(ninja.x, ninja.y, 50, 0, 2 * Math.PI);
     ctx.fill();
@@ -16,6 +17,9 @@ function drawNinja(ninja) {
     ctx.beginPath();
     ctx.arc(ninja.x, ninja.y, 50, 0, 2 * Math.PI);
     ctx.lineWidth = 10;
+    if (ninja.health < 50) {
+        ctx.strokeStyle = "rgb(" + (Math.floor((50 - ninja.health) * 5.1)) + ", 0, 0)";
+    }
     ctx.stroke();
     ctx.closePath();
     ctx.beginPath();
@@ -84,19 +88,31 @@ function drawSelectScreen(){
 
 function drawDoors() {
     if (room.north.door.exists == true) {
-        ctx.fillStyle = 'slategrey';
-        ctx.fillRect(350, 0, 100, 20);
+        ctx.fillStyle = room.north.door.color;
+        ctx.fillRect(325, 0, 125, 10);
+        ctx.strokeStyle = 'white';
+        ctx.strokeWidth = 0.5;
+        ctx.strokeRect(325, 0, 125, 10);
     }
     if (room.south.door.exists == true) {
-        ctx.fillStyle = 'slategrey';
-        ctx.fillRect(350, 580, 100, 20);
+        ctx.fillStyle = room.south.door.color;
+        ctx.fillRect(325, 590, 125, 10);
+        ctx.strokeStyle = 'white';
+        ctx.strokeWidth = 0.5;
+        ctx.strokeRect(325, 590, 125, 10);
     }
     if (room.east.door.exists == true) {
-        ctx.fillStyle = 'slategrey';
-        ctx.fillRect(780, 250, 20, 100);
+        ctx.fillStyle = room.east.door.color;
+        ctx.fillRect(790, 225, 10, 125);
+        ctx.strokeStyle = 'white';
+        ctx.strokeWidth = 0.5;
+        ctx.strokeRect(790, 225, 10, 125);
     }
     if (room.west.door.exists == true) {
-        ctx.fillStyle = 'slategrey';
-        ctx.fillRect(0, 250, 20, 100);
+        ctx.fillStyle = room.west.door.color;
+        ctx.fillRect(0, 225, 10, 125);
+        ctx.strokeStyle = 'white';
+        ctx.strokeWidth = 0.5;
+        ctx.strokeRect(0, 225, 10, 125);
     }
 }

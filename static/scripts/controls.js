@@ -6,6 +6,7 @@ document.addEventListener("keydown", e => {
 });
 
 document.addEventListener("keyup", e => {
+    console.log(e);
     if (user != null) {
         release(e);
     } else if (mode == 'title') {
@@ -64,6 +65,14 @@ function release(e) {
 
         console.log("space");
     }
+    else if (e.keyCode == 69) {
+        changeEquip(1);
+        //E => SHUFFLE ITEMS RIGHT
+    }
+    else if (e.keyCode = 81) {
+        changeEquip(-1);
+        //Q => SHUFFLE ITEMS LEFT
+    }
 }
 
 function creationControls(e) {
@@ -116,7 +125,6 @@ function creationControls(e) {
 function colorize() {
     if (select == 'body') {
         character.color = randomColor();
-        drawSelectScreen();
     }
     if (select == 'eyes'){
         character.eyes = randomColor();
