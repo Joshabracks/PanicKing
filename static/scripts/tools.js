@@ -5,3 +5,4 @@ function randomColor(){
     let color = "rgb(" + r + ", " + g + ", " + b + ")";
     return color;
 }
+

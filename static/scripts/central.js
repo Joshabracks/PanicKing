@@ -100,7 +100,7 @@ setInterval(function () {
     if (user != null) {
         ctx.fillStyle = 'darkslategrey';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = 'slategrey';
+        ctx.fillStyle = room.color;
         ctx.fillRect(10, 10, canvas.width - 20, canvas.height - 20);
         drawDoors();
         blocked = false;

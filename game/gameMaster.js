@@ -276,6 +276,7 @@ function Room(xCoord, yCoord) {
     this.players = {};
     this.brokenDoors = ['north', 'south', 'east', 'west'];
     this.contents = {};
+    this.color = randomMutedColor();
 }
 
 function Container() {
@@ -382,3 +383,26 @@ function Key(character, room) {
     this.rooms[room.id] = true;
 }
 
+function randomMutedColor(){
+    let r = Math.floor(Math.random() * 255);
+    let g = Math.floor(Math.random() * 100) - 50;
+    if (g < 0) {
+        g = 0;
+        g += Math.floor(Math.random() * 50);
+    }
+    if (g > 255) {
+        g = 255;
+        g -= Math.floor(Math.random() * 50)
+    } 
+    let b = Math.floor(Math.random() * 100) - 50;
+    if (b < 0) {
+        b = 0;
+        b += Math.floor(Math.random() * 50);
+    }
+    if (b > 255) {
+        b = 255;
+        b -= Math.floor(Math.random() * 50)
+    } 
+    let color = "rgb(" + r + ", " + g + ", " + b + ")";
+    return color;
+}
