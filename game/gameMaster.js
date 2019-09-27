@@ -77,6 +77,7 @@ module.exports = function (io) {
             io.to(room.id).emit('game update', { room: rooms[room.id] });
         })
         socket.on('disconnect', function (data) {
+            let hp = new HealthPack();
             for (place in rooms) {
                 let room = rooms[place];
                 for (player in room.players) {
@@ -98,6 +99,9 @@ module.exports = function (io) {
                             hat.y = current.y;
                             room.contents[current.hat.id] = current.hat;
                         }
+                        hp.x = current.x;
+                        hp.y = current.y;
+                        room.contents[hp.id] = hp;
                         delete rooms[place].players[player];
                         io.to(room.id).emit('game update', { room: room });
                     }
@@ -105,7 +109,6 @@ module.exports = function (io) {
             }
         });
     });
-
     function itemCollision(room) {
         for (object in room.contents) {
             let item = room.contents[object];
