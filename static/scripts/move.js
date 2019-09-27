@@ -77,6 +77,7 @@ function bounce() {
             if (current.y < user.y) {
                 user.y += user.speed + 1;
             }
+            user.health -= current.strength/10;
             move(user);
             updatePackage.character = user;
             updatePackage.sent = false;

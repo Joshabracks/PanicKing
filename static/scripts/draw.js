@@ -16,6 +16,9 @@ function drawNinja(ninja) {
     ctx.beginPath();
     ctx.arc(ninja.x, ninja.y, 50, 0, 2 * Math.PI);
     ctx.lineWidth = 10;
+    if (ninja.health < 50) {
+        ctx.strokeStyle = "rgb(" + (Math.floor((50 - ninja.health) * 5.1)) + ", 0, 0)";
+    }
     ctx.stroke();
     ctx.closePath();
     ctx.beginPath();

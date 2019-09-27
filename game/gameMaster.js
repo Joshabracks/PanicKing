@@ -18,6 +18,7 @@ module.exports = function (io) {
             let character = rooms[data.character.room].players[data.character.id];
             character.x = data.character.x;
             character.y = data.character.y;
+            character.health = data.character.health;
             character.lookVert = data.character.lookVert;
             character.lookHorz = data.character.lookHorz;
             itemCollision(rooms[data.character.room]);
@@ -283,7 +284,7 @@ function SpikedHelmet() {
     this.image = "images/spikedHelmet.svg";
     this.width = 200;
     this.height = 200;
-    this.drawLoc = { x: 0, y: 70 };
+    this.drawLoc = { x: 78, y: 135 };
     this.health = 0;
     this.strength = 4;
     this.speed = 0;
@@ -297,7 +298,7 @@ function SpeedHat() {
     this.image = "images/speedCap.svg";
     this.width = 41.364;
     this.height = 41.364;
-    this.drawLoc = { x: 70, y: -50 };
+    this.drawLoc = { x: 75, y: 110 };
     this.health = 0;
     this.strength = 0;
     this.speed = 3;
@@ -311,7 +312,7 @@ function Helmet() {
     this.image = "images/helmet.svg";
     this.width = 41.364;
     this.height = 41.364;
-    this.drawLoc = { x: 70, y: 70 };
+    this.drawLoc = { x: 75, y: 100 };
     this.health = 30;
     this.strength = 0;
     this.speed = 0;

@@ -1,3 +1,19 @@
+const winHeight = window.innerHeight/600;
+const winWidth = window.innerWidth /800;
+const canvas = document.getElementById("canvas");
+
+let scaler = winWidth;
+if (winHeight < winWidth) {
+    scaler = winHeight;
+}
+
+canvas.height = 600*scaler;
+canvas.width = 800*scaler;
+
+
+const ctx = canvas.getContext("2d");
+let user = null;
+
 const socket = io();
 socket.on('greeting', function (data) { //4
     console.log(data.msg); //5
@@ -62,11 +78,7 @@ function title() {
 
 
 
-const canvas = document.getElementById("canvas");
-canvas.height = 600;
-canvas.width = 800;
-const ctx = canvas.getContext("2d");
-let user = null;
+
 
 
 // let user = new User("Smiley", 10, 10, 100, 100);
@@ -168,6 +180,9 @@ socket.on('game update', function (data) {
     room = data.room;
     user.room = data.room.id;
     updatePending = false;
+    if (user.health < 0) {
+        location.reload();
+    }
 
     // for (player in data.players) {
     //     if (data.players[player].id != user.id) {
