@@ -9,7 +9,8 @@ let moving = false;
 let players;
 let room;
 let blocked = false;
-let equip = false;
+let equip = 0;
+let equippedItem = 0;
 let updatePackage = {
     sent: true,
     character: {data: null, sent: true},
@@ -160,6 +161,10 @@ socket.on('game update', function (data) {
     user.speed = userUpdate.speed;
     user.health = userUpdate.health;
     user.strength = userUpdate.strength;
+    user.bag = userUpdate.bag;
+    user.bagTotal = userUpdate.bagTotal;
+    user.keyRing = userUpdate.keyRing;
+    user.keyTotal = userUpdate.keyTotal;
     room = data.room;
     user.room = data.room.id;
     updatePending = false;
