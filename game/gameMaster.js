@@ -207,21 +207,25 @@ module.exports = function (io) {
         if (rooms[room.north.id.x + ":" + room.north.id.y]) {
             // let current = rooms[room.north.id.x + ":" + room.north.id.y];
             room.north.door.exists = true;
+            rooms[room.id].north.door.color = rooms[room.north.id.x + ":" + room.north.id.y].color;
             io.to(room.id).emit('game update', { room: room });
         }
         if (rooms[room.south.id.x + ":" + room.south.id.y]) {
             // let current = rooms[room.south.id.x + ":" + room.south.id.y];
             room.south.door.exists = true;
+            rooms[room.id].south.door.color = rooms[room.south.id.x + ":" + room.south.id.y].color;
             io.to(room.id).emit('game update', { room: room });
         }
         if (rooms[room.east.id.x + ":" + room.east.id.y]) {
             // let current = rooms[room.east.id.x + ":" + room.east.id.y];
             room.east.door.exists = true;
+            rooms[room.id].east.door.color = rooms[room.east.id.x + ":" + room.east.id.y].color;
             io.to(room.id).emit('game update', { room: room });
         }
         if (rooms[room.west.id.x + ":" + room.west.id.y]) {
             // let current = rooms[room.west.id.x + ":" + room.west.id.y];
             room.west.door.exists = true;
+            rooms[room.id].west.door.color = rooms[room.west.id.x + ":" + room.west.id.y].color;
             io.to(room.id).emit('game update', { room: room });
         }
     }
@@ -385,7 +389,8 @@ function Key(character, room) {
 
 function randomMutedColor(){
     let r = Math.floor(Math.random() * 255);
-    let g = Math.floor(Math.random() * 100) - 50;
+    let g = r;
+    g += Math.floor(Math.random() * 100) -50;
     if (g < 0) {
         g = 0;
         g += Math.floor(Math.random() * 50);
@@ -394,7 +399,8 @@ function randomMutedColor(){
         g = 255;
         g -= Math.floor(Math.random() * 50)
     } 
-    let b = Math.floor(Math.random() * 100) - 50;
+    let b = r;
+    b += Math.floor(Math.random() * 100) -50;
     if (b < 0) {
         b = 0;
         b += Math.floor(Math.random() * 50);
