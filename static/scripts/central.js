@@ -10,12 +10,12 @@ function scaleWindow() {
     let wideScale = window.innerWidth / 800;
     let highScale = window.innerHeight / 600;
     if (wideScale < highScale) {
-        ctx.canvas.height = 600 * wideScale;
-        ctx.canvas.width = 800 * wideScale;
+        ctx.canvas.height = height * wideScale;
+        ctx.canvas.width = width * wideScale;
         ctx.scale(wideScale, wideScale);
     } else {
-        ctx.canvas.height = 600 * highScale;
-        ctx.canvas.width = 800 * highScale;
+        ctx.canvas.height = height * highScale;
+        ctx.canvas.width = width * highScale;
         ctx.scale(highScale, highScale);
     }
     ctx.putImageData;
