@@ -1,3 +1,24 @@
+function smoothMove(object) {
+    let oldObject = players[object.id];
+    let xDiff = Math.abs(object.x - oldObject.x);
+    let yDiff = Math.abs(object.y - object.y);
+    if (xDiff > 10) {
+        if (object.x > oldObject.x) {
+            object.x = oldObject.x + 10;
+        } else {
+            object.x = oldOjbect.x - 10;
+        }
+    }
+    if (yDiff > 10) {
+        if (object.y > oldObject.y) {
+            object.y = oldObject.y + 10;
+        } else {
+            object.y = oldOjbect.y - 10;
+        }
+    }
+    return object;
+}
+
 function move(object) {
     //MOVE UP
     if (object.up == true) {

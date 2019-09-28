@@ -51,6 +51,8 @@ socket.on('greeting', function (data) { //4
 });
 let id;
 let moving = false;
+let oldRoom;
+let oldPlayers;
 let players;
 let room;
 let blocked = false;
@@ -140,6 +142,7 @@ setInterval(function () {
         blocked = false;
         for (thing in players) {
             let current = players[thing];
+            current = smoothMove(current);
             drawNinja(current);
             if (current.id != user.id) {
                 if ((Math.abs(user.x - current.x) < 90) && (Math.abs(user.y - current.y) < 90)) {
@@ -194,6 +197,8 @@ socket.on('player accepted', function (data) {
 });
 
 socket.on('game update', function (data) {
+    oldRoom = room;
+    oldPlayers = players;
     delete room;
     delete players;
     players = data.room.players;
