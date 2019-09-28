@@ -1,12 +1,46 @@
 
-const canvas = document.getElementById("canvas");
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
+const height = 600;
+const width = 800;
+
+function scaleWindow() {
+    ctx.getImageData;
+
+    let wideScale = window.innerWidth / 800;
+    let highScale = window.innerHeight / 600;
+    if (wideScale < highScale) {
+        ctx.canvas.height = height * wideScale;
+        ctx.canvas.width = width * wideScale;
+        ctx.scale(wideScale, wideScale);
+    } else {
+        ctx.canvas.height = height * highScale;
+        ctx.canvas.width = width * highScale;
+        ctx.scale(highScale, highScale);
+    }
+    ctx.putImageData;
+    if (mode == 'title') {
+        ctx.globalAlpha = 1;
+                ctx.fillStyle = 'darkslategrey';
+                ctx.fillRect(0, 0, width, height);
+                ctx.fillStyle = 'slategrey';
+                ctx.fillRect(10, 10, width - 20, height - 20);
+                ctx.drawImage(titleCard, 100, 150);
+                ctx.font = "15px Arial";
+                ctx.fillStyle = "white";
+                ctx.fillText("Press Any Key", 600, 400);
+    }
+    if (mode == 'character creation') {
+        drawSelectScreen();
+    }
+}
 
 
-canvas.height = 600;
-canvas.width = 800;
 
+window.onresize = function () {
+    scaleWindow();
+}
 
-const ctx = canvas.getContext("2d");
 let user = null;
 
 const socket = io();
@@ -24,8 +58,8 @@ let equip = 0;
 let equippedItem = 0;
 let updatePackage = {
     sent: true,
-    character: {data: null, sent: true},
-    room: {data: null, sent: true},
+    character: { data: null, sent: true },
+    room: { data: null, sent: true },
 }
 let updatePending = false;
 
@@ -44,9 +78,9 @@ function title() {
             if (alpha <= 1) {
                 ctx.globalAlpha = 1;
                 ctx.fillStyle = 'darkslategrey';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillRect(0, 0, width, height);
                 ctx.fillStyle = 'slategrey';
-                ctx.fillRect(10, 10, canvas.width - 20, canvas.height - 20);
+                ctx.fillRect(10, 10, width - 20, height - 20);
                 ctx.globalAlpha = alpha;
                 ctx.drawImage(titleCard, 100, 150);
                 ctx.font = "15px Arial";
@@ -58,9 +92,9 @@ function title() {
             else {
                 ctx.globalAlpha = 1;
                 ctx.fillStyle = 'darkslategrey';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillRect(0, 0, width, height);
                 ctx.fillStyle = 'slategrey';
-                ctx.fillRect(10, 10, canvas.width - 20, canvas.height - 20);
+                ctx.fillRect(10, 10, width - 20, height - 20);
                 ctx.drawImage(titleCard, 100, 150);
                 ctx.font = "15px Arial";
                 ctx.fillStyle = "white";
@@ -84,9 +118,9 @@ function startGame() { }
 
 function drawCanvas() {
     ctx.fillStyle = 'darkslategrey';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, width, height);
     ctx.fillStyle = 'slategrey';
-    ctx.fillRect(10, 10, canvas.width - 20, canvas.height - 20);
+    ctx.fillRect(10, 10, width - 20, height - 20);
     if (user != null) {
         console.log('user');
     } else {
@@ -99,9 +133,9 @@ function drawCanvas() {
 setInterval(function () {
     if (user != null) {
         ctx.fillStyle = 'darkslategrey';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, width, height);
         ctx.fillStyle = room.color;
-        ctx.fillRect(10, 10, canvas.width - 20, canvas.height - 20);
+        ctx.fillRect(10, 10, width - 20, height - 20);
         drawDoors();
         blocked = false;
         for (thing in players) {
@@ -114,7 +148,7 @@ setInterval(function () {
                 }
             }
         }
-        
+
         if (blocked == false) {
             move(user);
         } else {
@@ -144,6 +178,7 @@ function getUser() {
 
 function init() {
     // getUser()
+    scaleWindow();
     drawCanvas();
 }
 

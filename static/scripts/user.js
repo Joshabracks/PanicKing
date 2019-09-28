@@ -35,9 +35,9 @@ function createCharacter() {
     character = new User("", 200, 120, 75, 75);
     character.id = id;
     ctx.fillStyle = 'darkslategrey';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, width, height);
     ctx.fillStyle = 'slategrey';
-    ctx.fillRect(10, 10, canvas.width - 20, canvas.height - 20);
+    ctx.fillRect(10, 10, width - 20, height - 20);
     drawNinja(character);
     ctx.font = "30px Arial";
     ctx.fillStyle = "white";
