@@ -11,8 +11,8 @@ function drawNinja(ninja) {
     ctx.beginPath();
     ctx.fillStyle = ninja.bandana;
     ctx.lineWidth = 2;
-    ctx.fillRect(ninja.x-47, ninja.y-25, 95, 30);
-    ctx.strokeRect(ninja.x-47, ninja.y-25, 95, 30);
+    ctx.fillRect(ninja.x - 47, ninja.y - 25, 95, 30);
+    ctx.strokeRect(ninja.x - 47, ninja.y - 25, 95, 30);
     ctx.closePath();
     ctx.beginPath();
     ctx.arc(ninja.x, ninja.y, 50, 0, 2 * Math.PI);
@@ -24,10 +24,10 @@ function drawNinja(ninja) {
     ctx.closePath();
     ctx.beginPath();
     ctx.fillStyle = "white";
-    ctx.fillRect(ninja.x+15, ninja.y - 25, 20, 20);
+    ctx.fillRect(ninja.x + 15, ninja.y - 25, 20, 20);
     ctx.closePath();
     ctx.beginPath();
-    ctx.fillRect(ninja.x-35, ninja.y - 25, 20, 20);
+    ctx.fillRect(ninja.x - 35, ninja.y - 25, 20, 20);
     ctx.closePath();
     ctx.beginPath();
     ctx.fillStyle = ninja.eyes;
@@ -48,17 +48,17 @@ function drawNinja(ninja) {
     ctx.strokeRect(ninja.x + 15, ninja.y - 25, 20, 20);
     ctx.closePath();
     ctx.beginPath();
-    ctx.strokeRect(ninja.x-35, ninja.y - 25, 20, 20);
+    ctx.strokeRect(ninja.x - 35, ninja.y - 25, 20, 20);
     ctx.closePath();
     if (ninja.hat) {
         let img = new Image(ninja.hat.width, ninja.hat.height);
         img.src = ninja.hat.image;
-        ctx.drawImage(img, ninja.x-ninja.hat.drawLoc.x, ninja.y-ninja.hat.drawLoc.y);
+        ctx.drawImage(img, ninja.x - ninja.hat.drawLoc.x, ninja.y - ninja.hat.drawLoc.y);
     }
 }
 
 
-function drawSelectScreen(){
+function drawSelectScreen() {
     ctx.globalAlpha = 1;
     ctx.fillStyle = 'darkslategrey';
     ctx.fillRect(0, 0, width, height);
@@ -84,15 +84,30 @@ function drawSelectScreen(){
         ctx.fillText("Join the Panic!!!", 300, 400);
     }
     drawNinja(character);
+    drawTestMaster();
 }
 
 function drawDoors() {
+    var keyImage = document.getElementById('keyImage');
     if (room.north.door.exists == true) {
         ctx.fillStyle = room.north.door.color;
         ctx.fillRect(325, 0, 125, 10);
         ctx.strokeStyle = 'white';
         ctx.strokeWidth = 0.5;
         ctx.strokeRect(325, 0, 125, 10);
+        var idComplete = room.north.id.x + ":" + room.north.id.y;
+        for (let k in user.keys) {
+            var key = user.keys[k];
+            for (let room in key.rooms) {
+                if (room == idComplete) {
+                    ctx.save()
+                    ctx.translate(405, -15)
+                    ctx.rotate(90 * Math.PI / 180)
+                    ctx.drawImage(keyImage,0, 0 )
+                    ctx.restore();
+                }
+            }
+        }
     }
     if (room.south.door.exists == true) {
         ctx.fillStyle = room.south.door.color;
@@ -100,6 +115,19 @@ function drawDoors() {
         ctx.strokeStyle = 'white';
         ctx.strokeWidth = 0.5;
         ctx.strokeRect(325, 590, 125, 10);
+        var idComplete = room.south.id.x + ":" + room.south.id.y;
+        for (let k in user.keys) {
+            var key = user.keys[k];
+            for (let room in key.rooms) {
+                if (room == idComplete) {
+                    ctx.save()
+                    ctx.translate(405, 575)
+                    ctx.rotate(90 * Math.PI / 180)
+                    ctx.drawImage(keyImage,0, 0 )
+                    ctx.restore();
+                }
+            }
+        }
     }
     if (room.east.door.exists == true) {
         ctx.fillStyle = room.east.door.color;
@@ -107,6 +135,15 @@ function drawDoors() {
         ctx.strokeStyle = 'white';
         ctx.strokeWidth = 0.5;
         ctx.strokeRect(790, 225, 10, 125);
+        var idComplete = room.east.id.x + ":" + room.east.id.y;
+        for (let k in user.keys) {
+            var key = user.keys[k];
+            for (let room in key.rooms) {
+                if (room == idComplete) {
+                    ctx.drawImage(keyImage,774, 270 )
+                }
+            }
+        }
     }
     if (room.west.door.exists == true) {
         ctx.fillStyle = room.west.door.color;
@@ -114,5 +151,29 @@ function drawDoors() {
         ctx.strokeStyle = 'white';
         ctx.strokeWidth = 0.5;
         ctx.strokeRect(0, 225, 10, 125);
+        var idComplete = room.west.id.x + ":" + room.west.id.y;
+        for (let k in user.keys) {
+            var key = user.keys[k];
+            for (let room in key.rooms) {
+                if (room == idComplete) {
+                    ctx.drawImage(keyImage,-10, 270 )
+                }
+            }
+        }
     }
+}
+
+function drawTestMaster() {
+    let colorstar = star.replace("#color1#", randomColor());
+    colorstar = colorstar.replace("#color2#", randomColor());
+    colorstar = colorstar.replace("#color3#", randomColor());
+    colorstar = colorstar.replace("#color4#", randomColor());
+    colorstar = colorstar.replace("#color5#", randomColor());
+    var svgBlob = new Blob([colorstar], { type: "image/svg+xml" });
+    var url = window.URL.createObjectURL(svgBlob);
+    let img = new Image(268, 262);
+    img.src = url;
+    img.onload = function () {
+        ctx.drawImage(img, 50, 50);
+    };
 }

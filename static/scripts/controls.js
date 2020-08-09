@@ -92,7 +92,7 @@ function creationControls(e) {
     }
     else if (e.keyCode == 65) {
         //A => LEFT
-        colorize();
+        colorize(-1);
     }
     else if (e.keyCode == 83) {
         //S => DOWN
@@ -110,7 +110,7 @@ function creationControls(e) {
     }
     else if (e.keyCode == 68) {
         //D => RIGHT
-        colorize();
+        colorize(1);
     }
     else if (e.keyCode == 32) {
         //SPACE
@@ -122,14 +122,35 @@ function creationControls(e) {
     drawSelectScreen();
 }
 
-function colorize() {
+function colorize(inc) {
     if (select == 'body') {
-        character.color = randomColor();
+        ccbody += inc;
+        if (ccbody < 0) {
+            ccbody = colors.length - 1;
+        }
+        if (ccbody >= colors.length) {
+            ccbody = 0;
+        }
+        character.color = colors[ccbody];
     }
     if (select == 'eyes'){
-        character.eyes = randomColor();
+        cceyes += inc;
+        if (cceyes < 0) {
+            cceyes = colors.length - 1;
+        }
+        if (cceyes >= colors.length) {
+            cceyes = 0;
+        }
+        character.eyes = colors[cceyes];
     }
     if (select == 'bandana') {
-        character.bandana = randomColor();
+        ccbandana += inc;
+        if (ccbandana < 0) {
+            ccbandana = colors.length - 1;
+        }
+        if (ccbandana >= colors.length) {
+            ccbandana = 0;
+        }
+        character.bandana = colors[ccbandana];
     }
 }

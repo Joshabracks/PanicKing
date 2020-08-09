@@ -1,3 +1,4 @@
+const fs = require('fs');
 let messages = [];
 let rooms = {};
 let incompleteRooms = {};
@@ -5,11 +6,15 @@ let players = {};
 let playerCount = 1;
 let roomCount = 1;
 let itemCount = 0;
-
+const star = fs.readFileSync(__dirname + '/star.svg', "utf8", (
+    err => { console.log(err) },
+    data => {
+        console.log("DATA: TRUE")
+    }));
 module.exports = function (io) {
 
     io.on('connection', function (socket) {
-        socket.emit('greeting', { msg: 'PanicKing: Connected.', id: socket.id });
+        socket.emit('greeting', { msg: 'PanicKing: Connected.', id: socket.id, star: star });
         socket.on('thankyou', function (data) {
             console.log(data.msg);
         });
