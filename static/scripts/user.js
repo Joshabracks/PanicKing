@@ -10,11 +10,11 @@ function User(name, x, y, width, height) {
     this.up = false;
     this.down = false;
     this.speed = 5;
-    this.strength = 5;
+    this.strength = 5; 
     this.health = 50;
-    this.eyes = "black";
-    this.color = "#58595B";
-    this.bandana = "red";
+    this.eyes = colors[cceyes];
+    this.color = colors[ccbody];
+    this.bandana = colors[ccbandana];
     this.lookHorz = 0;
     this.lookVert = 0;
     this.hat = false;

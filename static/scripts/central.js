@@ -3,6 +3,7 @@ let canvas = document.getElementById("canvas");
 let ctx = canvas.getContext("2d");
 const height = 600;
 const width = 800;
+let star;
 
 function scaleWindow() {
     ctx.getImageData;
@@ -21,14 +22,14 @@ function scaleWindow() {
     ctx.putImageData;
     if (mode == 'title') {
         ctx.globalAlpha = 1;
-                ctx.fillStyle = 'darkslategrey';
-                ctx.fillRect(0, 0, width, height);
-                ctx.fillStyle = 'slategrey';
-                ctx.fillRect(10, 10, width - 20, height - 20);
-                ctx.drawImage(titleCard, 100, 150);
-                ctx.font = "15px Arial";
-                ctx.fillStyle = "white";
-                ctx.fillText("Press Any Key", 600, 400);
+        ctx.fillStyle = 'darkslategrey';
+        ctx.fillRect(0, 0, width, height);
+        ctx.fillStyle = 'slategrey';
+        ctx.fillRect(10, 10, width - 20, height - 20);
+        ctx.drawImage(titleCard, 100, 150);
+        ctx.font = "15px Arial";
+        ctx.fillStyle = "white";
+        ctx.fillText("Press Any Key", 600, 400);
     }
     if (mode == 'character creation') {
         drawSelectScreen();
@@ -46,6 +47,7 @@ let user = null;
 const socket = io();
 socket.on('greeting', function (data) { //4
     console.log(data.msg); //5
+    star = data.star;
     id = data.id;
     socket.emit('thankyou', { msg: 'Thank you for connecting me! -Client', id: id }); //6
 });
@@ -132,46 +134,51 @@ function drawCanvas() {
 }
 
 
-setInterval(function () {
-    if (user != null) {
-        ctx.fillStyle = 'darkslategrey';
-        ctx.fillRect(0, 0, width, height);
-        ctx.fillStyle = room.color;
-        ctx.fillRect(10, 10, width - 20, height - 20);
-        drawDoors();
-        blocked = false;
-        for (thing in players) {
-            let current = players[thing];
-            current = smoothMove(current);
-            drawNinja(current);
-            if (current.id != user.id) {
-                if ((Math.abs(user.x - current.x) < 90) && (Math.abs(user.y - current.y) < 90)) {
-                    damage(current.strength);
-                    blocked = true;
+function gameDraw() {
+    if (room) {
+        if (user != null) {
+            ctx.fillStyle = 'darkslategrey';
+            ctx.fillRect(0, 0, width, height);
+            ctx.fillStyle = room.color;
+            ctx.fillRect(10, 10, width - 20, height - 20);
+            drawDoors();
+            blocked = false;
+            for (thing in players) {
+                let current = players[thing];
+                current = smoothMove(current);
+                drawNinja(current);
+                if (current.id != user.id) {
+                    if ((Math.abs(user.x - current.x) < 90) && (Math.abs(user.y - current.y) < 90)) {
+                        damage(current.strength);
+                        blocked = true;
+                    }
                 }
             }
-        }
 
-        if (blocked == false) {
-            move(user);
-        } else {
-            bounce(user);
-        }
-        players[user.id] = user;
-        if ((moving == true) && (updatePending == false)) {
-            updatePackage.character = user;
-            updatePackage.sent = false;
-        }
-        isMoving();
-        travelCheck();
-        itemCheck();
-        if ((updatePackage.sent == false) && (updatePending == false)) {
-            socket.emit('useraction', updatePackage);
-            updatePending = true;
-            updatePackage.sent = true;
+            if (blocked == false) {
+                move(user);
+            } else {
+                bounce(user);
+            }
+            players[user.id] = user;
+            if ((moving == true) && (updatePending == false)) {
+                updatePackage.character = user;
+                updatePackage.sent = false;
+            }
+            isMoving();
+            travelCheck();
+            itemCheck();
+            if ((updatePackage.sent == false) && (updatePending == false)) {
+                socket.emit('useraction', updatePackage);
+                updatePending = true;
+                updatePackage.sent = true;
+            }
         }
     }
-}, 20);
+    requestAnimationFrame(gameDraw)
+};
+
+requestAnimationFrame(gameDraw);
 
 function getUser() {
     if (user == null) {
