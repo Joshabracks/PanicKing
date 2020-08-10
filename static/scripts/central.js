@@ -109,16 +109,8 @@ function title() {
     }
 }
 
-
-
-
-
-
-// let user = new User("Smiley", 10, 10, 100, 100);
-
-
-function setUser() { }
-function startGame() { }
+// function setUser() { }
+// function startGame() { }
 
 function drawCanvas() {
     ctx.fillStyle = 'darkslategrey';
@@ -154,7 +146,6 @@ function gameDraw() {
                     }
                 }
             }
-
             if (blocked == false) {
                 move(user);
             } else {

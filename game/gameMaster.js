@@ -55,7 +55,7 @@ module.exports = function (io) {
                 // character.isKing = true;
                 const crown = new Crown;
                 character.hat = crown;
-                dawnHat(character, crown);
+                character.hat.wear(character);
             } else {
                 room = addRoom();
                 const rando = randomItem();
@@ -109,6 +109,16 @@ module.exports = function (io) {
             }
         });
     });
+    function characterCollisions(room) {
+        for (character in room.players) {
+            for (other in room.players) {
+                if (Math.abs(character.x - other.x) < 50 && Math.abs(character.y - other.y) < 50) {
+                    character.health -= other.strength;
+                    other.health -= character.strength;
+                }
+            }
+        }
+    }
     function itemCollision(room) {
         for (object in room.contents) {
             let item = room.contents[object];
@@ -142,17 +152,17 @@ module.exports = function (io) {
                     if ((Math.abs(item.x - current.x) < 90) && (Math.abs(item.y - current.y) < 90)) {
                         if (item.type == 'crown') {
                             if (current.hat) {
-                                removeHat(current, item);
+                                current.hat.remove(current);
                                 current.inventory[current.hat.id] = current.hat;
                             }
                             current.hat = item;
-                            dawnHat(current, item)
+                            current.hat.wear(current)
                         } else if (item.type == 'hat') {
                             if (current.hat) {
                                 current.inventory[item.id] = item;
                             } else {
                                 current.hat = item;
-                                dawnHat(current, item);
+                                current.hat.wear(current);
                             }
                         } else if (item.type == 'key') {
                             console.log('Key Pickup: ', item);
@@ -318,60 +328,86 @@ function Container() {
     this.image;
 }
 
-// Strength Hat
-function SpikedHelmet() {
-    this.type = 'hat';
-    this.id = itemCount;
-    itemCount++;
-    this.image = "images/spikedHelmet.svg";
-    this.width = 200;
-    this.height = 200;
-    this.drawLoc = { x: 78, y: 135 };
-    this.health = 0;
-    this.strength = 4;
-    this.speed = 0;
+class Hat {
+    constructor () {
+        this.type = 'hat';
+        this.id = itemCount;
+        itemCount++;
+        this.width = 0;
+        this.height = 0;
+        this.health = 0;
+        this.strength = 0;
+        this.speed = 0;
+    }
+    wear(character) {
+        character.strength += this.strength;
+        character.speed += this.speed;
+        character.health += this.health;
+    }
+    remove(character) {
+        character.strength -= this.strength;
+        character.speed -= this.speed;
+        character.health -= this.health;
+    }
 }
 
+// Strength Hat
+class SpikedHelmet extends Hat{
+    constructor() {
+        super()
+        this.image = "images/spikedHelmet.svg";
+        this.width = 200;
+        this.height = 200;
+        this.drawLoc = { x: 78, y: 135 };
+        this.health = 0;
+        this.strength = 4;
+        this.speed = 0;
+    }
+}
+
+
+
 // Speed Hat
-function SpeedHat() {
-    this.type = 'hat';
-    this.id = itemCount;
-    itemCount++;
-    this.image = "images/speedCap.svg";
-    this.width = 41.364;
-    this.height = 41.364;
-    this.drawLoc = { x: 75, y: 110 };
-    this.health = 0;
-    this.strength = 0;
-    this.speed = 3;
+class SpeedHat extends Hat {
+    constructor() {
+        super()
+        this.image = "images/speedCap.svg";
+        this.width = 41.364;
+        this.height = 41.364;
+        this.drawLoc = { x: 75, y: 110 };
+        this.health = 0;
+        this.strength = 0;
+        this.speed = 3;
+    }
 }
 
 // JugHat
-function Helmet() {
-    this.type = 'hat';
-    this.id = itemCount;
-    itemCount++;
-    this.image = "images/helmet.svg";
-    this.width = 41.364;
-    this.height = 41.364;
-    this.drawLoc = { x: 75, y: 100 };
-    this.health = 30;
-    this.strength = 0;
-    this.speed = 0;
+class Helmet extends Hat {
+    constructor() {
+        super()
+        this.image = "images/helmet.svg";
+        this.width = 41.364;
+        this.height = 41.364;
+        this.drawLoc = { x: 75, y: 100 };
+        this.health = 30;
+        this.strength = 0;
+        this.speed = 0;
+    }
 }
 
 // Crown
-function Crown() {
-    this.type = 'crown';
-    this.id = itemCount;
-    itemCount++;
-    this.image = "images/crown.svg";
-    this.width = 41.364;
-    this.height = 41.364;
-    this.drawLoc = { x: 70, y: 70 };
-    this.health = 20;
-    this.strength = 3;
-    this.speed = 2;
+class Crown extends Hat {
+    constructor() {
+        super()
+        this.type = 'crown'
+        this.image = "images/crown.svg";
+        this.width = 41.364;
+        this.height = 41.364;
+        this.drawLoc = { x: 70, y: 70 };
+        this.health = 20;
+        this.strength = 3;
+        this.speed = 2;
+    }
 }
 
 function HealthPack() {
@@ -384,17 +420,6 @@ function HealthPack() {
     this.image = "images/healthPack.svg";
     this.health = Math.floor((Math.random() * 20) + 5);
 }
-function dawnHat(character, hat) {
-    character.strength += hat.strength;
-    character.speed += hat.speed;
-    character.health += hat.health;
-}
-function removeHat(character, hat) {
-    character.strength -= hat.strength;
-    character.speed -= hat.speed;
-    character.health -= hat.health;
-}
-
 
 function Key(character, room) {
     this.id = itemCount;

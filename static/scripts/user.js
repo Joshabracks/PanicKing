@@ -53,4 +53,3 @@ function createCharacter() {
 function joinGame() {
     socket.emit('new player', {character: character});
 }
-
